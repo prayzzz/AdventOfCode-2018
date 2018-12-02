@@ -49,6 +49,9 @@ namespace AdventOfCode2018
             Console.WriteLine("Day01Part2: " + Solve(input));
         }
 
+        /// <summary>
+        /// Try some <see cref="Span{T}"/> 
+        /// </summary>
         private static int Solve(string input)
         {
             const char lineEnd = '\n';
