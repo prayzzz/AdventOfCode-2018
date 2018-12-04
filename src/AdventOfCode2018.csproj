@@ -17,6 +17,7 @@
 
     <ItemGroup>
         <Content Include="Input\Day03.txt"/>
+        <Content Include="Input\Day04.txt"/>
     </ItemGroup>
 
 </Project>
