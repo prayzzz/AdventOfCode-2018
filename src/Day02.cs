@@ -14,7 +14,7 @@ namespace AdventOfCode2018
             Console.WriteLine("Day02Part1: " + Solve(input));
         }
 
-        private int Solve(string input)
+        private static int Solve(string input)
         {
             var lines = input.Trim().Split("\n");
 
@@ -57,7 +57,7 @@ namespace AdventOfCode2018
             Console.WriteLine("Day02Part2: " + Solve(input));
         }
 
-        private string Solve(string input)
+        private static string Solve(string input)
         {
             var lines = input.Trim().Split("\n");
 

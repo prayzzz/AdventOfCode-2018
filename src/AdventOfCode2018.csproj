@@ -15,4 +15,8 @@
         <PackageReference Include="MSTest.TestFramework" Version="1.3.2"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <Content Include="Input\Day03.txt"/>
+    </ItemGroup>
+
 </Project>
