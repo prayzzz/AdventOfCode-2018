@@ -17,7 +17,6 @@ namespace AdventOfCode2018
         {
             while (true)
             {
-                var reduction = false;
                 for (var i = 0; i < input.Length; i++)
                 {
                     if (i + 1 >= input.Length)
@@ -30,18 +29,13 @@ namespace AdventOfCode2018
 
                     if (char.ToUpper(c) == char.ToUpper(c2) && c != c2)
                     {
-                        reduction = true;
                         input = input.Remove(i, 2);
+                        i = Math.Max(i - 2, -1);
                     }
                 }
 
-                if (!reduction)
-                {
-                    break;
-                }
+                return input.Length;
             }
-
-            return input.Length;
         }
     }
 
@@ -66,31 +60,23 @@ namespace AdventOfCode2018
 
                 var preparedInput = input.Replace(lower, "").Replace(upper, "");
 
-                while (true)
+                for (var i = 0; i < preparedInput.Length; i++)
                 {
-                    var isReduced = false;
-                    for (var i = 0; i < preparedInput.Length; i++)
-                    {
-                        if (i + 1 >= preparedInput.Length)
-                        {
-                            break;
-                        }
-
-                        var c = preparedInput[i];
-                        var c2 = preparedInput[i + 1];
-
-                        if (char.ToUpper(c) == char.ToUpper(c2) && c != c2)
-                        {
-                            isReduced = true;
-                            preparedInput = preparedInput.Remove(i, 2);
-                        }
-                    }
-
-                    if (!isReduced)
+                    if (i + 1 >= preparedInput.Length)
                     {
                         break;
                     }
+
+                    var c = preparedInput[i];
+                    var c2 = preparedInput[i + 1];
+
+                    if (char.ToUpper(c) == char.ToUpper(c2) && c != c2)
+                    {
+                        preparedInput = preparedInput.Remove(i, 2);
+                        i = Math.Max(i - 2, -1);
+                    }
                 }
+
 
                 if (preparedInput.Length < minLength)
                 {
