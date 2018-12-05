@@ -22,16 +22,16 @@ namespace AdventOfCode2018
             var guardNoticePattern = new Regex("Guard #(?<id>\\d+) begins shift");
 
             var lines = input.Trim().Split("\n");
-            var notes = lines.Select(line => linePattern.Match(line))
-                             .Select(match => (Time: match.Groups["time"].Value.Trim(), Notice: match.Groups["notice"].Value.Trim()))
-                             .ToList();
-
             var sleepCount = new Dictionary<string, int[]>();
 
             var guardId = "";
             var sleepStartMinute = -1;
-            foreach (var (time, notice) in notes.OrderBy(x => x.Time))
+            foreach (var line in lines.OrderBy(x => x))
             {
+                var match = linePattern.Match(line);
+                var time = match.Groups["time"].Value.Trim();
+                var notice = match.Groups["notice"].Value.Trim();
+                
                 if (notice.StartsWith("Guard"))
                 {
                     guardId = guardNoticePattern.Match(notice).Groups["id"].Value;
@@ -79,16 +79,16 @@ namespace AdventOfCode2018
             var guardNoticePattern = new Regex("Guard #(?<id>\\d+) begins shift");
 
             var lines = input.Trim().Split("\n");
-            var notes = lines.Select(line => linePattern.Match(line))
-                             .Select(match => (Time: match.Groups["time"].Value.Trim(), Notice: match.Groups["notice"].Value.Trim()))
-                             .ToList();
-
             var sleepCount = new Dictionary<string, int[]>();
 
             var guardId = "";
             var sleepStartMinute = -1;
-            foreach (var (time, notice) in notes.OrderBy(x => x.Time))
+            foreach (var line in lines.OrderBy(x => x))
             {
+                var match = linePattern.Match(line);
+                var time = match.Groups["time"].Value.Trim();
+                var notice = match.Groups["notice"].Value.Trim();
+                
                 if (notice.StartsWith("Guard"))
                 {
                     guardId = guardNoticePattern.Match(notice).Groups["id"].Value;
