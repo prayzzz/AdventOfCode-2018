@@ -12,7 +12,7 @@ namespace AdventOfCode2018
     public class Day07Part1
     {
         [TestMethod]
-        public void ChronalCoordinates()
+        public void TheSumOfItsParts()
         {
             var input = TestHelper.ReadEmbeddedFile(GetType().Assembly, "Input.Day07.txt");
             Console.WriteLine(GetType().Name + ": " + Solve(input));
@@ -67,7 +67,7 @@ namespace AdventOfCode2018
     public class Day07Part2
     {
         [TestMethod]
-        public void ChronalCoordinates()
+        public void TheSumOfItsParts()
         {
             var input = TestHelper.ReadEmbeddedFile(GetType().Assembly, "Input.Day07.txt");
             Console.WriteLine(GetType().Name + ": " + Solve(input));
