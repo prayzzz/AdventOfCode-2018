@@ -16,19 +16,19 @@ namespace AdventOfCode2018
             Console.WriteLine(GetType().Name + ": " + Solve(input));
         }
 
-        private static int Solve(string input)
+        private static long Solve(string input)
         {
             var line = Regex.Match(input, "(\\d+) players; last marble is worth (\\d+) points");
 
             var players = int.Parse(line.Groups[1].Value);
             var lastMarble = int.Parse(line.Groups[2].Value);
 
-            var scores = new Dictionary<int, int>();
-            var board = new List<int>(lastMarble) {0};
+            var scores = new Dictionary<int, long>();
+            var board = new LinkedList<long>();
+            var current = board.AddFirst(0);
 
             var currentPlayer = 0;
-            var currentIndex = 0;
-
+            
             for (var i = 1; i <= lastMarble; i++)
             {
                 currentPlayer = currentPlayer % players + 1;
@@ -37,21 +37,21 @@ namespace AdventOfCode2018
                 {
                     scores.TryAdd(currentPlayer, 0);
                     scores[currentPlayer] += i;
-
-                    currentIndex = currentIndex - 7;
-                    if (currentIndex < 0)
-                    {
-                        currentIndex = board.Count + currentIndex;
-                    }
                     
-                    scores[currentPlayer] += board[currentIndex];
-                    board.RemoveAt(currentIndex);
+                    for (var j = 0; j < 7; j++)
+                    {
+                        current = current.Previous ?? board.Last;
+                    }
+
+                    scores[currentPlayer] += current.Value;
+                    
+                    var remove = current;
+                    current = remove.Next;
+                    board.Remove(remove);
                 }
                 else
                 {
-                    var insertIndex = (currentIndex + 1) % board.Count + 1;
-                    board.Insert(insertIndex, i);
-                    currentIndex = insertIndex;
+                    current = board.AddAfter(current.Next ?? board.First, i);
                 }
             }
 
@@ -69,9 +69,46 @@ namespace AdventOfCode2018
             Console.WriteLine(GetType().Name + ": " + Solve(input));
         }
 
-        private static int Solve(string input)
+        private static long Solve(string input)
         {
-            return -1;
+            var line = Regex.Match(input, "(\\d+) players; last marble is worth (\\d+) points");
+
+            var players = int.Parse(line.Groups[1].Value);
+            var lastMarble = int.Parse(line.Groups[2].Value) * 100;
+
+            var scores = new Dictionary<int, long>();
+            var board = new LinkedList<long>();
+            var current = board.AddFirst(0);
+
+            var currentPlayer = 0;
+            
+            for (var i = 1; i <= lastMarble; i++)
+            {
+                currentPlayer = currentPlayer % players + 1;
+
+                if (i % 23 == 0)
+                {
+                    scores.TryAdd(currentPlayer, 0);
+                    scores[currentPlayer] += i;
+                    
+                    for (var j = 0; j < 7; j++)
+                    {
+                        current = current.Previous ?? board.Last;
+                    }
+
+                    scores[currentPlayer] += current.Value;
+                    
+                    var remove = current;
+                    current = remove.Next;
+                    board.Remove(remove);
+                }
+                else
+                {
+                    current = board.AddAfter(current.Next ?? board.First, i);
+                }
+            }
+
+            return scores.Aggregate((l, r) => l.Value > r.Value ? l : r).Value;
         }
     }
 }
