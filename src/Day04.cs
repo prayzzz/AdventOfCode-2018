@@ -2,21 +2,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AdventOfCode2018
 {
-    [TestClass]
-    public class Day04Part1
+    public class Day04 : IDay
     {
-        [TestMethod]
-        public void ReposeRecord()
+        public void Part1()
         {
-            var input = TestHelper.ReadEmbeddedFile(GetType().Assembly, "Input.Day04.txt");
-            Console.WriteLine(GetType().Name + ": " + Solve(input));
+            var input = Helper.ReadEmbeddedFile(GetType().Assembly, $"Input.{GetType().Name}.txt");
+            Console.WriteLine($"{GetType().Name} Part 1: {SolvePart1(input)}");
         }
 
-        private static int Solve(string input)
+        public void Part2()
+        {
+            var input = Helper.ReadEmbeddedFile(GetType().Assembly, $"Input.{GetType().Name}.txt");
+            Console.WriteLine($"{GetType().Name} Part 2: {SolvePart2(input)}");
+        }
+
+        private static int SolvePart1(string input)
         {
             var linePattern = new Regex("\\[(?<time>.*)\\] (?<notice>.*)");
             var guardNoticePattern = new Regex("Guard #(?<id>\\d+) begins shift");
@@ -31,7 +34,7 @@ namespace AdventOfCode2018
                 var match = linePattern.Match(line);
                 var time = match.Groups["time"].Value.Trim();
                 var notice = match.Groups["notice"].Value.Trim();
-                
+
                 if (notice.StartsWith("Guard"))
                 {
                     guardId = guardNoticePattern.Match(notice).Groups["id"].Value;
@@ -61,19 +64,8 @@ namespace AdventOfCode2018
 
             return int.Parse(guardIdWithMostSleep) * minuteMostAsleep.index;
         }
-    }
 
-    [TestClass]
-    public class Day04Part2
-    {
-        [TestMethod]
-        public void ReposeRecord()
-        {
-            var input = TestHelper.ReadEmbeddedFile(GetType().Assembly, "Input.Day04.txt");
-            Console.WriteLine(GetType().Name + ": " + Solve(input));
-        }
-
-        private static int Solve(string input)
+        private static int SolvePart2(string input)
         {
             var linePattern = new Regex("\\[(?<time>.*)\\] (?<notice>.*)");
             var guardNoticePattern = new Regex("Guard #(?<id>\\d+) begins shift");
@@ -88,7 +80,7 @@ namespace AdventOfCode2018
                 var match = linePattern.Match(line);
                 var time = match.Groups["time"].Value.Trim();
                 var notice = match.Groups["notice"].Value.Trim();
-                
+
                 if (notice.StartsWith("Guard"))
                 {
                     guardId = guardNoticePattern.Match(notice).Groups["id"].Value;

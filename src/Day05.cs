@@ -1,19 +1,22 @@
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AdventOfCode2018
 {
-    [TestClass]
-    public class Day05Part1
+    public class Day05 : IDay
     {
-        [TestMethod]
-        public void AlchemicalReduction()
+        public void Part1()
         {
-            var input = TestHelper.ReadEmbeddedFile(GetType().Assembly, "Input.Day05.txt");
-            Console.WriteLine(GetType().Name + ": " + Solve(input));
+            var input = Helper.ReadEmbeddedFile(GetType().Assembly, $"Input.{GetType().Name}.txt");
+            Console.WriteLine($"{GetType().Name} Part 1: {SolvePart1(input)}");
         }
 
-        private static int Solve(string input)
+        public void Part2()
+        {
+            var input = Helper.ReadEmbeddedFile(GetType().Assembly, $"Input.{GetType().Name}.txt");
+            Console.WriteLine($"{GetType().Name} Part 2: {SolvePart2(input)}");
+        }
+
+        private static int SolvePart1(string input)
         {
             while (true)
             {
@@ -37,19 +40,8 @@ namespace AdventOfCode2018
                 return input.Length;
             }
         }
-    }
 
-    [TestClass]
-    public class Day05Part2
-    {
-        [TestMethod]
-        public void AlchemicalReduction()
-        {
-            var input = TestHelper.ReadEmbeddedFile(GetType().Assembly, "Input.Day05.txt");
-            Console.WriteLine(GetType().Name + ": " + Solve(input));
-        }
-
-        private static int Solve(string input)
+        private static int SolvePart2(string input)
         {
             var minLength = input.Length;
 

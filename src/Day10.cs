@@ -2,21 +2,25 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AdventOfCode2018
 {
-    [TestClass]
-    public class Day10Part1
+    public class Day10 : IDay
     {
-        [TestMethod]
-        public void TheStarsAlign()
+        public void Part1()
         {
-            var input = TestHelper.ReadEmbeddedFile(GetType().Assembly, "Input.Day10.txt");
-            Console.WriteLine(GetType().Name + ": " + Solve(input));
+            var input = Helper.ReadEmbeddedFile(GetType().Assembly, $"Input.{GetType().Name}.txt");
+            Console.WriteLine($"{GetType().Name} Part 1: {SolvePart1(input)}");
         }
 
-        private static int Solve(string input)
+        public void Part2()
+        {
+            var input = Helper.ReadEmbeddedFile(GetType().Assembly, $"Input.{GetType().Name}.txt");
+//            Console.WriteLine($"{GetType().Name} Part 2: {SolvePart2(input)}");
+            Console.WriteLine($"{GetType().Name} Part 2: N/A");
+        }
+
+        private static int SolvePart1(string input)
         {
             var linePattern = new Regex("position=<\\s*(?<x>-?\\d+),\\s*(?<y>-?\\d+)> velocity=<\\s*(?<vx>-?\\d+),\\s*(?<vy>-?\\d+)>");
 
@@ -78,7 +82,7 @@ namespace AdventOfCode2018
             return second;
         }
 
-        private static void Print(List<GridPoint> points, int max)
+        private static void Print(IReadOnlyCollection<GridPoint> points, int max)
         {
             var maxX = points.Where(g => g.X < max).Max(g => g.X) + 1;
             var minX = points.Where(g => g.X > 0).Min(g => g.X);
@@ -105,13 +109,8 @@ namespace AdventOfCode2018
             }
         }
 
-        class GridPoint
+        private class GridPoint
         {
-            public int X { get; set; }
-            public int Y { get; set; }
-            public int VX { get; set; }
-            public int VY { get; set; }
-
             public GridPoint(int x, int y, int vx, int vy)
             {
                 X = x;
@@ -119,22 +118,11 @@ namespace AdventOfCode2018
                 VX = vx;
                 VY = vy;
             }
-        }
-    }
 
-    [TestClass]
-    public class Day10Part2
-    {
-        [TestMethod]
-        public void TheStarsAlign()
-        {
-            var input = TestHelper.ReadEmbeddedFile(GetType().Assembly, "Input.Day10.txt");
-            Console.WriteLine(GetType().Name + ": " + Solve(input));
-        }
-
-        private static int Solve(string input)
-        {
-            return -1;
+            public int X { get; set; }
+            public int Y { get; set; }
+            public int VX { get; }
+            public int VY { get; }
         }
     }
 }

@@ -1,20 +1,23 @@
 using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AdventOfCode2018
 {
-    [TestClass]
-    public class Day02Part1
+    public class Day02 : IDay
     {
-        [TestMethod]
-        public void InventoryManagementSystem()
+        public void Part1()
         {
-            var input = TestHelper.ReadEmbeddedFile(GetType().Assembly, "Input.Day02.txt");
-            Console.WriteLine("Day02Part1: " + Solve(input));
+            var input = Helper.ReadEmbeddedFile(GetType().Assembly, $"Input.{GetType().Name}.txt");
+            Console.WriteLine($"{GetType().Name} Part 1: {SolvePart1(input)}");
         }
 
-        private static int Solve(string input)
+        public void Part2()
+        {
+            var input = Helper.ReadEmbeddedFile(GetType().Assembly, $"Input.{GetType().Name}.txt");
+            Console.WriteLine($"{GetType().Name} Part 2: {SolvePart2(input)}");
+        }
+
+        private static int SolvePart1(string input)
         {
             var lines = input.Trim().Split("\n");
 
@@ -24,7 +27,7 @@ namespace AdventOfCode2018
             {
                 var twoFound = false;
                 var threeFound = false;
-                
+
                 foreach (var current in line)
                 {
                     var count = line.Count(c => c == current);
@@ -42,47 +45,34 @@ namespace AdventOfCode2018
                     }
                 }
             }
-            
+
             return two * three;
         }
-    }
 
-    [TestClass]
-    public class Day02Part2
-    {
-        [TestMethod]
-        public void InventoryManagementSystem()
-        {
-            var input = TestHelper.ReadEmbeddedFile(GetType().Assembly, "Input.Day02.txt");
-            Console.WriteLine("Day02Part2: " + Solve(input));
-        }
-
-        private static string Solve(string input)
+        private static string SolvePart2(string input)
         {
             var lines = input.Trim().Split("\n");
 
             foreach (var id1 in lines.Select(l => l.Trim()))
+            foreach (var id2 in lines.Select(l => l.Trim()))
             {
-                foreach (var id2 in lines.Select(l => l.Trim()))
+                var missed = 0;
+                var indexOfDifferentChar = -1;
+                for (var i = 0; i < id1.Length; i++)
                 {
-                    var missed = 0;
-                    var indexOfDifferentChar = -1;
-                    for (var i = 0; i < id1.Length; i++)
+                    if (id1[i] != id2[i])
                     {
-                        if (id1[i] != id2[i])
-                        {
-                            missed++;
-                            indexOfDifferentChar = i;
-                        }
-                    }
-
-                    if (missed == 1)
-                    {
-                        return id1.Remove(indexOfDifferentChar, 1);
+                        missed++;
+                        indexOfDifferentChar = i;
                     }
                 }
+
+                if (missed == 1)
+                {
+                    return id1.Remove(indexOfDifferentChar, 1);
+                }
             }
-            
+
             return "";
         }
     }

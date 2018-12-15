@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace AdventOfCode2018
 {
-    public class TestHelper
+    public static class Helper
     {
         public static string ReadEmbeddedFile(Assembly assembly, string filePath)
         {

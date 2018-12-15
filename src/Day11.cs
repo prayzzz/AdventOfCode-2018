@@ -1,18 +1,20 @@
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AdventOfCode2018
 {
-    [TestClass]
-    public class Day11Part1
+    public class Day11 : IDay
     {
-        [TestMethod]
-        public void ChronalCharge()
+        public void Part1()
         {
-            Console.WriteLine(GetType().Name + ": " + Solve(18));
+            Console.WriteLine($"{GetType().Name} Part 1: {SolvePart1(1723)}");
         }
 
-        private static string Solve(int input)
+        public void Part2()
+        {
+            Console.WriteLine($"{GetType().Name} Part 2: {SolvePart2(1723)}");
+        }
+
+        private static string SolvePart1(int input)
         {
             var maxX = 0;
             var maxY = 0;
@@ -35,37 +37,27 @@ namespace AdventOfCode2018
                 }
             }
 
-            return $"{maxX},{maxY} Power: {maxPower}";
+            return $"{maxX},{maxY}";
         }
 
-        public static int GetPowerLevel(int input, int x, int y)
+        private static int GetPowerLevel(int input, int x, int y)
         {
             var rackId = x + 10;
             var powerLevel = (rackId * y + input) * rackId;
             return powerLevel / 100 % 10 - 5;
         }
-    }
-
-    [TestClass]
-    public class Day11Part2
-    {
-        [TestMethod]
-        public void ChronalCharge()
-        {
-            Console.WriteLine(GetType().Name + ": " + Solve(1723));
-        }
 
         /// <summary>
-        /// Values after size 20 are getting lower
+        ///     Values after size 20 are getting lower
         /// </summary>
-        private static string Solve(int input)
+        private static string SolvePart2(int input)
         {
             var cells = new int[300, 300];
 
             for (var x = 0; x < 300; x++)
             for (var y = 0; y < 300; y++)
             {
-                cells[x, y] = Day11Part1.GetPowerLevel(input, x, y);
+                cells[x, y] = GetPowerLevel(input, x, y);
             }
 
             (int x, int y, int size, int power) result = (0, 0, 0, 0);
@@ -90,7 +82,7 @@ namespace AdventOfCode2018
                 }
             }
 
-            return $"{result.x},{result.y},{result.size} Power: {result.power}";
+            return $"{result.x},{result.y},{result.size}";
         }
     }
 }

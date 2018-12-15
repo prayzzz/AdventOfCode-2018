@@ -1,82 +1,69 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AdventOfCode2018
 {
-    public class Day13Cart
+    public class Day13 : IDay
     {
-        public int Y { get; set; }
-        public int X { get; set; }
-        public int CrossingCount { get; set; }
-        public char Direction { get; set; }
-        public char Beneath { get; set; }
-
-        public Day13Cart(int x, int y, char direction, char beneath)
+        private static readonly Dictionary<(char, char), char> CurveMapping = new Dictionary<(char, char), char>
         {
-            Y = x;
-            X = y;
-            CrossingCount = 0;
-            Direction = direction;
-            Beneath = beneath;
+            {('/', '^'), '>'},
+            {('/', '>'), '^'},
+            {('/', 'v'), '<'},
+            {('/', '<'), 'v'},
+            {('\\', '^'), '<'},
+            {('\\', '>'), 'v'},
+            {('\\', 'v'), '>'},
+            {('\\', '<'), '^'}
+        };
+
+        private static readonly Dictionary<(int, char), char> CrossingMapping = new Dictionary<(int, char), char>
+        {
+            {(0, 'v'), '>'},
+            {(0, '>'), '^'},
+            {(0, '<'), 'v'},
+            {(0, '^'), '<'},
+            {(2, 'v'), '<'},
+            {(2, '>'), 'v'},
+            {(2, '<'), '^'},
+            {(2, '^'), '>'}
+        };
+
+        public void Part1()
+        {
+            var input = Helper.ReadEmbeddedFile(GetType().Assembly, $"Input.{GetType().Name}.txt");
+            Console.WriteLine($"{GetType().Name} Part 1: {SolvePart1(input)}");
         }
-    }
 
-    [TestClass]
-    public class Day13Part1
-    {
-        [TestMethod]
-        public void MineCartMadness()
+        public void Part2()
         {
-            var input = TestHelper.ReadEmbeddedFile(GetType().Assembly, "Input.Day13.txt");
-            Console.WriteLine(GetType().Name + ": " + Solve(input));
+            var input = Helper.ReadEmbeddedFile(GetType().Assembly, $"Input.{GetType().Name}.txt");
+            Console.WriteLine($"{GetType().Name} Part 2: {SolvePart2(input)}");
         }
 
-        private static string Solve(string input)
+        private static string SolvePart1(string input)
         {
-            var curveMapping = new Dictionary<(char, char), char>();
-            curveMapping.Add(('/', '^'), '>');
-            curveMapping.Add(('/', '>'), '^');
-            curveMapping.Add(('/', 'v'), '<');
-            curveMapping.Add(('/', '<'), 'v');
-            curveMapping.Add(('\\', '^'), '<');
-            curveMapping.Add(('\\', '>'), 'v');
-            curveMapping.Add(('\\', 'v'), '>');
-            curveMapping.Add(('\\', '<'), '^');
-
-            var crossingMapping = new Dictionary<(int, char), char>();
-            crossingMapping.Add((0, 'v'), '>');
-            crossingMapping.Add((0, '>'), '^');
-            crossingMapping.Add((0, '<'), 'v');
-            crossingMapping.Add((0, '^'), '<');
-            crossingMapping.Add((2, 'v'), '<');
-            crossingMapping.Add((2, '>'), 'v');
-            crossingMapping.Add((2, '<'), '^');
-            crossingMapping.Add((2, '^'), '>');
-
             var lines = input.Split("\n").Select(x => x.TrimEnd().ToCharArray()).ToArray();
 
             // Find carts
-            var carts = new List<Day13Cart>();
+            var carts = new List<Cart>();
             for (var x = 0; x < lines.Length; x++)
             for (var y = 0; y < lines[x].Length; y++)
             {
                 var current = lines[x][y];
                 if (current == 'v' || current == '^')
                 {
-                    carts.Add(new Day13Cart(x, y, current, '|'));
+                    carts.Add(new Cart(x, y, current, '|'));
                 }
                 else if (current == '<' || current == '>')
                 {
-                    carts.Add(new Day13Cart(x, y, current, '-'));
+                    carts.Add(new Cart(x, y, current, '-'));
                 }
             }
 
-            var i = 0;
             while (true)
             {
-                i++;
                 var currentCarts = carts.OrderBy(c => c.Y).ThenBy(c => c.X);
 
                 foreach (var cart in currentCarts)
@@ -103,7 +90,7 @@ namespace AdventOfCode2018
                     // Check for crash
                     if (lines[y2][x2] == '^' || lines[y2][x2] == '>' || lines[y2][x2] == '<' || lines[y2][x2] == 'v')
                     {
-                        return $"x: {x2} y: {y2} i: {i}";
+                        return $"{x2},{y2}";
                     }
 
                     if (lines[y2][x2] == '+')
@@ -111,7 +98,7 @@ namespace AdventOfCode2018
                         lines[cart.Y][cart.X] = cart.Beneath;
                         cart.Beneath = lines[y2][x2];
 
-                        cart.Direction = crossingMapping.GetValueOrDefault((cart.CrossingCount % 3, cart.Direction), cart.Direction);
+                        cart.Direction = CrossingMapping.GetValueOrDefault((cart.CrossingCount % 3, cart.Direction), cart.Direction);
                         lines[y2][x2] = cart.Direction;
 
                         cart.CrossingCount++;
@@ -127,7 +114,7 @@ namespace AdventOfCode2018
                         lines[cart.Y][cart.X] = cart.Beneath;
                         cart.Beneath = lines[y2][x2];
 
-                        cart.Direction = curveMapping[(lines[y2][x2], cart.Direction)];
+                        cart.Direction = CurveMapping[(lines[y2][x2], cart.Direction)];
                         lines[y2][x2] = cart.Direction;
                     }
 
@@ -136,42 +123,11 @@ namespace AdventOfCode2018
                 }
             }
         }
-    }
 
-    [TestClass]
-    public class Day13Part2
-    {
-        [TestMethod]
-        public void MineCartMadness()
+        private static string SolvePart2(string input)
         {
-            var input = TestHelper.ReadEmbeddedFile(GetType().Assembly, "Input.Day13.txt");
-            Console.WriteLine(GetType().Name + ": " + Solve(input));
-        }
-
-        private static string Solve(string input)
-        {
-            var curveMapping = new Dictionary<(char, char), char>();
-            curveMapping.Add(('/', '^'), '>');
-            curveMapping.Add(('/', '>'), '^');
-            curveMapping.Add(('/', 'v'), '<');
-            curveMapping.Add(('/', '<'), 'v');
-            curveMapping.Add(('\\', '^'), '<');
-            curveMapping.Add(('\\', '>'), 'v');
-            curveMapping.Add(('\\', 'v'), '>');
-            curveMapping.Add(('\\', '<'), '^');
-
-            var crossingMapping = new Dictionary<(int, char), char>();
-            crossingMapping.Add((0, 'v'), '>');
-            crossingMapping.Add((0, '>'), '^');
-            crossingMapping.Add((0, '<'), 'v');
-            crossingMapping.Add((0, '^'), '<');
-            crossingMapping.Add((2, 'v'), '<');
-            crossingMapping.Add((2, '>'), 'v');
-            crossingMapping.Add((2, '<'), '^');
-            crossingMapping.Add((2, '^'), '>');
-
             var lines = input.Split("\n").Select(x => x.TrimEnd().ToCharArray()).ToArray();
-            var carts = new List<Day13Cart>();
+            var carts = new List<Cart>();
 
             // Find carts
             for (var x = 0; x < lines.Length; x++)
@@ -180,26 +136,23 @@ namespace AdventOfCode2018
                 var current = lines[x][y];
                 if (current == 'v' || current == '^')
                 {
-                    carts.Add(new Day13Cart(x, y, current, '|'));
+                    carts.Add(new Cart(x, y, current, '|'));
                 }
                 else if (current == '<' || current == '>')
                 {
-                    carts.Add(new Day13Cart(x, y, current, '-'));
+                    carts.Add(new Cart(x, y, current, '-'));
                 }
             }
 
-            var i = 0;
             while (true)
             {
-                i++;
-
                 var orderedCarts = carts.OrderBy(c => c.Y).ThenBy(c => c.X).ToList();
                 if (orderedCarts.Count == 1)
                 {
-                    return $"x: {orderedCarts[0].X} y: {orderedCarts[0].Y} i: {i}";
+                    return $"{orderedCarts[0].X},{orderedCarts[0].Y}";
                 }
 
-                var crashed = new List<Day13Cart>();
+                var crashed = new List<Cart>();
                 foreach (var cart in orderedCarts)
                 {
                     if (crashed.Contains(cart))
@@ -248,7 +201,7 @@ namespace AdventOfCode2018
                         lines[cart.Y][cart.X] = cart.Beneath;
                         cart.Beneath = lines[y2][x2];
 
-                        cart.Direction = crossingMapping.GetValueOrDefault((cart.CrossingCount % 3, cart.Direction), cart.Direction);
+                        cart.Direction = CrossingMapping.GetValueOrDefault((cart.CrossingCount % 3, cart.Direction), cart.Direction);
                         lines[y2][x2] = cart.Direction;
 
                         cart.CrossingCount++;
@@ -264,7 +217,7 @@ namespace AdventOfCode2018
                         lines[cart.Y][cart.X] = cart.Beneath;
                         cart.Beneath = lines[y2][x2];
 
-                        cart.Direction = curveMapping[(lines[y2][x2], cart.Direction)];
+                        cart.Direction = CurveMapping[(lines[y2][x2], cart.Direction)];
                         lines[y2][x2] = cart.Direction;
                     }
 
@@ -272,6 +225,24 @@ namespace AdventOfCode2018
                     cart.X = x2;
                 }
             }
+        }
+
+        private class Cart
+        {
+            public Cart(int x, int y, char direction, char beneath)
+            {
+                Y = x;
+                X = y;
+                CrossingCount = 0;
+                Direction = direction;
+                Beneath = beneath;
+            }
+
+            public int Y { get; set; }
+            public int X { get; set; }
+            public int CrossingCount { get; set; }
+            public char Direction { get; set; }
+            public char Beneath { get; set; }
         }
     }
 }

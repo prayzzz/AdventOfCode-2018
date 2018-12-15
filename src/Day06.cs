@@ -1,21 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AdventOfCode2018
 {
-    [TestClass]
-    public class Day06Part1
+    public class Day06 : IDay
     {
-        [TestMethod]
-        public void ChronalCoordinates()
+        public void Part1()
         {
-            var input = TestHelper.ReadEmbeddedFile(GetType().Assembly, "Input.Day06.txt");
-            Console.WriteLine(GetType().Name + ": " + Solve(input));
+            var input = Helper.ReadEmbeddedFile(GetType().Assembly, $"Input.{GetType().Name}.txt");
+            Console.WriteLine($"{GetType().Name} Part 1: {SolvePart1(input)}");
         }
 
-        private static int Solve(string input)
+        public void Part2()
+        {
+            var input = Helper.ReadEmbeddedFile(GetType().Assembly, $"Input.{GetType().Name}.txt");
+            Console.WriteLine($"{GetType().Name} Part 2: {SolvePart2(input)}");
+        }
+
+        private static int SolvePart1(string input)
         {
             var lines = input.Split("\n");
 
@@ -90,19 +93,8 @@ namespace AdventOfCode2018
 
             return areaCount.Max();
         }
-    }
 
-    [TestClass]
-    public class Day06Part2
-    {
-        [TestMethod]
-        public void ChronalCoordinates()
-        {
-            var input = TestHelper.ReadEmbeddedFile(GetType().Assembly, "Input.Day06.txt");
-            Console.WriteLine(GetType().Name + ": " + Solve(input));
-        }
-
-        private static int Solve(string input)
+        private static int SolvePart2(string input)
         {
             var lines = input.Split("\n");
 
