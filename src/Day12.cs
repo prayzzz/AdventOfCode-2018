@@ -177,12 +177,12 @@ namespace AdventOfCode2018
                     foreach (var (pattern, value) in rules)
                     {
                         var isMatch = true;
-                        for (var checkPod = -2; checkPod < 3; checkPod++)
+                        for (var patternI = 0; patternI < 5; patternI++)
                         {
-                            var patternI = checkPod + 2;
-
+                            var podToCheck = patternI - 2;
+                            
                             // outside of range
-                            if (currentPod + checkPod < 0 || currentPod + checkPod >= pods.Count)
+                            if (currentPod + podToCheck < 0 || currentPod + podToCheck >= pods.Count)
                             {
                                 if (pattern[patternI])
                                 {
@@ -193,7 +193,7 @@ namespace AdventOfCode2018
                                 continue;
                             }
 
-                            if (pods[currentPod + checkPod] != pattern[patternI])
+                            if (pods[currentPod + podToCheck] != pattern[patternI])
                             {
                                 isMatch = false;
                                 break;
@@ -216,6 +216,7 @@ namespace AdventOfCode2018
                         break;
                     }
                 }
+
                 // add additional padding for next generation
                 for (var j = 0; j < neededPadding; j++) newPods.Add(false);
 
