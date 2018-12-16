@@ -65,15 +65,15 @@ namespace AdventOfCode2018
 
             var mapping = new Dictionary<int, HashSet<string>>();
             var result = 0;
-            for (var i = 0; i < lines.Count; i += 4)
+            for (var l = 0; l < lines.Count; l += 4)
             {
-                var ins = Regex.Matches(lines[i + 1], "\\d+").Select(x => int.Parse(x.Value)).ToArray();
-                var after = Regex.Matches(lines[i + 2], "\\d+").Select(x => int.Parse(x.Value)).ToArray();
+                var ins = Regex.Matches(lines[l + 1], "\\d+").Select(x => int.Parse(x.Value)).ToArray();
+                var after = Regex.Matches(lines[l + 2], "\\d+").Select(x => int.Parse(x.Value)).ToArray();
 
                 var validOpCodes = 0;
                 foreach (var (opcode, action) in Funcs)
                 {
-                    var before = Regex.Matches(lines[i], "\\d+").Select(x => int.Parse(x.Value)).ToArray();
+                    var before = Regex.Matches(lines[l], "\\d+").Select(x => int.Parse(x.Value)).ToArray();
 
                     try
                     {
@@ -83,17 +83,8 @@ namespace AdventOfCode2018
                     {
                         continue;
                     }
-
-                    var isValid = true;
-                    for (var j = 0; j < before.Length; j++)
-                    {
-                        if (before[j] != after[j])
-                        {
-                            isValid = false;
-                        }
-                    }
-
-                    if (isValid)
+                    
+                    if (before.Select((v, i) => v == after[i]).All(x => x))
                     {
                         validOpCodes++;
                         mapping.TryAdd(ins[0], new HashSet<string>());
@@ -121,7 +112,7 @@ namespace AdventOfCode2018
                 {
                     Console.Write($"{{ {value}, \"{key}\" }}, ");
                 }
-
+                
                 Console.WriteLine();
             }
         }
