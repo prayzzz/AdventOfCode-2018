@@ -50,13 +50,13 @@ namespace AdventOfCode2018
         public void Part1()
         {
             var input = Helper.ReadEmbeddedFile(GetType().Assembly, $"Input.{GetType().Name}.1.txt");
-            Console.WriteLine($"{GetType().Name} Part 1: {SolvePart1(input)}");
+            Console.WriteLine($"{GetType().Name} Part 1: {SolvePart1(input)} (Expected: 509)");
         }
 
         public void Part2()
         {
             var input = Helper.ReadEmbeddedFile(GetType().Assembly, $"Input.{GetType().Name}.2.txt");
-            Console.WriteLine($"{GetType().Name} Part 2: {SolvePart2(input)}");
+            Console.WriteLine($"{GetType().Name} Part 2: {SolvePart2(input)} (Expected: 496)");
         }
 
         private static int SolvePart1(string input)
