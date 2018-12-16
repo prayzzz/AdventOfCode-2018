@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
@@ -35,6 +36,8 @@ namespace AdventOfCode2018
             {
                 if (Activator.CreateInstance(day) is IDay dayInstance)
                 {
+                    var sw = Stopwatch.StartNew();
+                    
                     if (partArg == 1)
                     {
                         dayInstance.Part1();
@@ -48,6 +51,8 @@ namespace AdventOfCode2018
                         dayInstance.Part1();
                         dayInstance.Part2();
                     }
+                    
+                    Console.WriteLine($"Finished after {sw.Elapsed}");
                 }
             }
         }
