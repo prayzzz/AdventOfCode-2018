@@ -1,5 +1,6 @@
 using System.IO;
 using System.Reflection;
+using System.Text;
 
 namespace AdventOfCode2018
 {
@@ -20,6 +21,29 @@ namespace AdventOfCode2018
                     return reader.ReadToEnd();
                 }
             }
+        }
+
+        public static string Join<T>(this T[,] obj)
+        {
+            return obj.Join(null);
+        }
+
+        public static string Join<T>(this T[,] obj, string seperator)
+        {
+            var isSeperator = !string.IsNullOrEmpty(seperator);
+
+            var stringBuilder = new StringBuilder();
+            for (var i = 0; i < obj.GetUpperBound(0) + 1; i++)
+            for (var j = 0; j < obj.GetUpperBound(1) + 1; j++)
+            {
+                stringBuilder.Append(obj[i, j]);
+                if (isSeperator)
+                {
+                    stringBuilder.Append(seperator);
+                }
+            }
+
+            return stringBuilder.ToString();
         }
     }
 }
