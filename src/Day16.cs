@@ -83,7 +83,7 @@ namespace AdventOfCode2018
                     {
                         continue;
                     }
-                    
+
                     if (before.Select((v, i) => v == after[i]).All(x => x))
                     {
                         validOpCodes++;
@@ -112,13 +112,13 @@ namespace AdventOfCode2018
                 {
                     Console.Write($"{{ {value}, \"{key}\" }}, ");
                 }
-                
+
                 Console.WriteLine();
             }
         }
 
         /// <summary>
-        /// Use Backtracking to find mapping
+        ///     Use Backtracking to find mapping
         /// </summary>
         private static bool Find(int i, IReadOnlyDictionary<int, HashSet<string>> mapping, IDictionary<string, int> result)
         {
