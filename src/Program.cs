@@ -9,8 +9,8 @@ namespace AdventOfCode2018
     {
         public static void Main(string[] args)
         {
-            var dayArg = args.Length == 1 ? int.Parse(args[0]) : -1;
-            var partArg = args.Length == 2 ? int.Parse(args[1]) : -1;
+            var dayArg = args.Length >= 1 ? int.Parse(args[0]) : -1;
+            var partArg = args.Length >= 2 ? int.Parse(args[1]) : -1;
 
             var iDay = typeof(IDay);
             var days = Assembly.GetAssembly(typeof(Program))
@@ -37,7 +37,7 @@ namespace AdventOfCode2018
                 if (Activator.CreateInstance(day) is IDay dayInstance)
                 {
                     var sw = Stopwatch.StartNew();
-                    
+
                     if (partArg == 1)
                     {
                         dayInstance.Part1();
@@ -51,7 +51,7 @@ namespace AdventOfCode2018
                         dayInstance.Part1();
                         dayInstance.Part2();
                     }
-                    
+
                     Console.WriteLine($"Finished after {sw.Elapsed}");
                 }
             }
