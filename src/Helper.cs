@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -44,6 +45,18 @@ namespace AdventOfCode2018
             }
 
             return stringBuilder.ToString();
+        }
+
+        public static void AddOrReplace<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, TValue value)
+        {
+            if (dict.ContainsKey(key))
+            {
+                dict[key] = value;
+            }
+            else
+            {
+                dict.Add(key, value);
+            }
         }
     }
 }
