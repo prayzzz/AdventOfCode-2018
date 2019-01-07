@@ -15,7 +15,7 @@ namespace AdventOfCode2018
             var iDay = typeof(IDay);
             var days = Assembly.GetAssembly(typeof(Program))
                                .GetTypes()
-                               .Where(t => iDay.IsAssignableFrom(t)).ToList();
+                               .Where(t => iDay.IsAssignableFrom(t) && t != iDay).ToList();
 
             if (dayArg > 0)
             {
@@ -53,6 +53,7 @@ namespace AdventOfCode2018
                     }
 
                     Console.WriteLine($"Finished after {sw.Elapsed}");
+                    Console.WriteLine();
                 }
             }
         }

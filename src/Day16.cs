@@ -98,7 +98,7 @@ namespace AdventOfCode2018
                 }
             }
 
-            FindMapping(mapping);
+            // FindMapping(mapping);
 
             return result;
         }

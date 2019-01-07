@@ -6,12 +6,12 @@ namespace AdventOfCode2018
     {
         public void Part1()
         {
-            Console.WriteLine($"{GetType().Name} Part 1: {SolvePart1(1723)}");
+            Console.WriteLine($"{GetType().Name} Part 1: {SolvePart1(1723)} (Expected: 34,13)");
         }
 
         public void Part2()
         {
-            Console.WriteLine($"{GetType().Name} Part 2: {SolvePart2(1723)}");
+            Console.WriteLine($"{GetType().Name} Part 2: {SolvePart2(1723)} (Expected: 280,218,11)");
         }
 
         private static string SolvePart1(int input)
