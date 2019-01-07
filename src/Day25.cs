@@ -37,8 +37,8 @@ namespace AdventOfCode2018
                     foreach (var cluster in clusters)
                     foreach (var clusterP in cluster)
                     {
-                        if (3 >= Math.Abs(p1.X - clusterP.X) + Math.Abs(p1.Y - clusterP.Y) + Math.Abs(p1.Z - clusterP.Z) +
-                            Math.Abs(p1.T - clusterP.T))
+                        var d = Math.Abs(p1.X - clusterP.X) + Math.Abs(p1.Y - clusterP.Y) + Math.Abs(p1.Z - clusterP.Z) + Math.Abs(p1.T - clusterP.T);
+                        if (d < 4)
                         {
                             cluster.Add(p1);
                             toRemove.Add(p1);
@@ -52,7 +52,7 @@ namespace AdventOfCode2018
                 // if nothing was added to a cluster, create a new cluster with the first remaining element
                 if (toRemove.Count == 0)
                 {
-                    clusters.Add(new List<GridPoint> {q.First()});
+                    clusters.Add(new List<GridPoint> { q.First() });
                     toRemove.Add(q.First());
                 }
 
