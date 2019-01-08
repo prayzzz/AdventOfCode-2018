@@ -41,57 +41,50 @@ namespace AdventOfCode2018
             return result;
         }
 
+        /// <summary>
+        ///     Input must contain trailing blank line.
+        /// </summary>
         private static int SolvePart2(string input)
         {
             const char lineEnd = '\n';
 
             var inputSpan = input.AsSpan();
 
-            // Position of the first char of a line
-            var lineStart = 0;
-
             var frequencies = new HashSet<int>();
             var frequency = 0;
 
-            for (var j = 0; j < inputSpan.Length; j++)
+            while (true)
             {
-                if (inputSpan[j] == lineEnd)
+                // Position of the first char of a line
+                var lineStart = 0;
+
+                for (var j = 0; j < inputSpan.Length; j++)
                 {
-                    var line = inputSpan.Slice(lineStart, j - lineStart).Trim();
-
-                    switch (line[0])
+                    if (inputSpan[j] == lineEnd)
                     {
-                        case '+':
-                            frequency += int.Parse(line.Slice(1));
-                            break;
-                        case '-':
-                            frequency -= int.Parse(line.Slice(1));
-                            break;
-                        default:
-                            throw new ArgumentException($"Illegal operator '{line[0]}'");
+                        var line = inputSpan.Slice(lineStart, j - lineStart).Trim();
+
+                        switch (line[0])
+                        {
+                            case '+':
+                                frequency += int.Parse(line.Slice(1));
+                                break;
+                            case '-':
+                                frequency -= int.Parse(line.Slice(1));
+                                break;
+                            default:
+                                throw new ArgumentException($"Illegal operator '{line[0]}'");
+                        }
+
+                        lineStart = j + 1;
+
+                        if (!frequencies.Add(frequency))
+                        {
+                            return frequency;
+                        }
                     }
-
-                    lineStart = j + 1;
-
-                    if (!frequencies.Add(frequency))
-                    {
-                        return frequency;
-                    }
-                }
-
-                if (j == inputSpan.Length - 1)
-                {
-                    // Duplicate not found.
-
-                    // Reset cursor
-                    lineStart = 0;
-
-                    // Loop list again
-                    j = -1;
                 }
             }
-
-            return int.MaxValue;
         }
     }
 }
