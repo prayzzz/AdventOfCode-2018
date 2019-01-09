@@ -10,14 +10,13 @@ namespace AdventOfCode2018
         public void Part1()
         {
             var input = Helper.ReadEmbeddedFile(GetType().Assembly, $"Input.{GetType().Name}.txt");
-            Console.WriteLine($"{GetType().Name} Part 1: {SolvePart1(input)} (Expected: HRPHBRKG)");
+            Console.WriteLine($"{GetType().Name} Part 1: ... (Expected: HRPHBRKG)");
         }
 
         public void Part2()
         {
             var input = Helper.ReadEmbeddedFile(GetType().Assembly, $"Input.{GetType().Name}.txt");
-//            Console.WriteLine($"{GetType().Name} Part 2: {SolvePart2(input)}  (Expected: 10355)");
-            Console.WriteLine($"{GetType().Name} Part 2: N/A");
+            Console.WriteLine($"{GetType().Name} Part 2: {SolvePart1(input)}  (Expected: 10355)");
         }
 
         private static int SolvePart1(string input)
@@ -36,80 +35,60 @@ namespace AdventOfCode2018
                 points.Add(new GridPoint(x, y, vx, vy));
             }
 
-            var maxX = points.Max(g => g.X);
-            var maxY = points.Max(g => g.Y);
-            var max = Math.Max(maxX, maxY) + 2;
+            var smallestGridSize = int.MaxValue;
+            var previousPoints = points.ToList();
 
             var second = 0;
             while (true)
             {
-                second++;
-
                 // Move points
-                foreach (var gridPoint in points)
+                var currentPoints = new List<GridPoint>();
+                foreach (var gridPoint in previousPoints)
                 {
-                    gridPoint.X += gridPoint.VX;
-                    gridPoint.Y += gridPoint.VY;
+                    currentPoints.Add(new GridPoint(gridPoint.X + gridPoint.VX, gridPoint.Y + gridPoint.VY, gridPoint.VX, gridPoint.VY));
                 }
 
-                // Calculate points near to each other
-                var count = 0;
-                foreach (var gridPoint1 in points)
-                foreach (var gridPoint2 in points)
-                {
-                    if (gridPoint1.X != gridPoint2.X && gridPoint1.Y != gridPoint2.Y)
-                    {
-                        var distX = Math.Abs(gridPoint1.X - gridPoint2.X);
-                        var distY = Math.Abs(gridPoint1.Y - gridPoint2.Y);
+                var gridSize = currentPoints.Max(g => g.X) + currentPoints.Max(g => g.Y);
 
-                        if (distX + distY <= 2)
-                        {
-                            count++;
-                        }
-                    }
+                // previous iteration was best
+                if (gridSize > smallestGridSize)
+                {
+                    Print(previousPoints);
+                    return second;
                 }
 
-                // Print result
-                if (count > 550)
-                {
-                    Console.WriteLine("Points near to each other: " + count);
+                smallestGridSize = gridSize;
 
-                    Print(points, max);
-                    break;
-                }
+                previousPoints = currentPoints;
+                second++;
             }
-
-            return second;
         }
 
-        private static void Print(IReadOnlyCollection<GridPoint> points, int max)
+        private static void Print(IReadOnlyCollection<GridPoint> points)
         {
-            var maxX = points.Where(g => g.X < max).Max(g => g.X) + 1;
-            var minX = points.Where(g => g.X > 0).Min(g => g.X);
-            var maxY = points.Where(g => g.Y < max).Max(g => g.Y) + 1;
-            var minY = points.Where(g => g.Y > 0).Min(g => g.Y);
+            var maxX = points.Max(g => g.X) + 1;
+            var minX = points.Min(g => g.X);
+            var maxY = points.Max(g => g.Y) + 1;
+            var minY = points.Min(g => g.Y);
 
             var sky = new bool[maxX - minX, maxY - minY];
             foreach (var gridPoint in points)
             {
-                if (gridPoint.X > -1 && gridPoint.X < max && gridPoint.Y > -1 && gridPoint.Y < max)
-                {
-                    sky[gridPoint.X - minX, gridPoint.Y - minY] = true;
-                }
+                sky[gridPoint.X - minX, gridPoint.Y - minY] = true;
             }
 
-            for (var i = 0; i < sky.GetUpperBound(1) - 1; i++)
+            for (var i = 0; i < sky.GetUpperBound(1) + 1; i++)
             {
-                for (var j = 0; j < sky.GetUpperBound(0) - 1; j++)
+                for (var j = 0; j < sky.GetUpperBound(0) + 1; j++)
                 {
-                    Console.Write(sky[j, i] ? "#" : ".");
+                    Console.Write(sky[j, i] ? "#" : " ");
                 }
 
                 Console.Write(Environment.NewLine);
             }
         }
 
-        private class GridPoint
+        private struct GridPoint
         {
             public GridPoint(int x, int y, int vx, int vy)
             {
@@ -119,8 +98,8 @@ namespace AdventOfCode2018
                 VY = vy;
             }
 
-            public int X { get; set; }
-            public int Y { get; set; }
+            public int X { get; }
+            public int Y { get; }
             public int VX { get; }
             public int VY { get; }
         }
