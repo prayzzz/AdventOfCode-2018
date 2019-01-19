@@ -17,6 +17,7 @@ namespace AdventOfCode2018
         {
             var input = Helper.ReadEmbeddedFile(GetType().Assembly, $"Input.{GetType().Name}.txt");
             Console.WriteLine($"{GetType().Name} Part 2: {SolvePart2(input)} (Expected: 89915526)");
+            // But is 89915524. ¯\_(ツ)_/¯
         }
 
         private static int SolvePart1(string input)
@@ -42,10 +43,7 @@ namespace AdventOfCode2018
             foreach (var bot in bots)
             {
                 var distance = Math.Abs(bestBot.X - bot.X) + Math.Abs(bestBot.Y - bot.Y) + Math.Abs(bestBot.Z - bot.Z);
-                if (distance <= bestBot.Radius)
-                {
-                    botsInRange++;
-                }
+                if (distance <= bestBot.Radius) botsInRange++;
             }
 
             return botsInRange;
@@ -73,12 +71,8 @@ namespace AdventOfCode2018
             {
                 neighbours.Add(bot1, new List<Bot>());
                 foreach (var bot2 in bots.Where(b => b != bot1))
-                {
                     if (bot1.Radius + bot2.Radius >= Math.Abs(bot1.X - bot2.X) + Math.Abs(bot1.Y - bot2.Y) + Math.Abs(bot1.Z - bot2.Z))
-                    {
                         neighbours[bot1].Add(bot2);
-                    }
-                }
             }
 
             var cliques = FindCliques(neighbours);
@@ -87,13 +81,20 @@ namespace AdventOfCode2018
             foreach (var clique in cliques)
             {
                 var dist = clique.Max(b => Math.Abs(b.X) + Math.Abs(b.Y) + Math.Abs(b.Z) - b.Radius);
-                if (dist < result)
-                {
-                    result = dist;
-                }
+                if (dist < result) result = dist;
             }
 
             return result;
+        }
+
+        private static IEnumerable<List<Bot>> FindCliques(IReadOnlyDictionary<Bot, List<Bot>> neighbours)
+        {
+            var bots = neighbours.Keys.ToList();
+            var cliques = new List<List<Bot>>();
+
+            BronKerbosch2(neighbours, cliques, new List<Bot>(), bots, new List<Bot>());
+
+            return cliques;
         }
 
         private static void BronKerbosch2(
@@ -113,16 +114,10 @@ namespace AdventOfCode2018
 
                 // larger clique
                 var currentLength = cliques[0].Count;
-                if (currentClique.Count > currentLength)
-                {
-                    cliques.Clear();
-                }
+                if (currentClique.Count > currentLength) cliques.Clear();
 
                 // clique of same size
-                if (currentClique.Count >= currentLength)
-                {
-                    cliques.Add(currentClique.ToList());
-                }
+                if (currentClique.Count >= currentLength) cliques.Add(currentClique.ToList());
 
                 return;
             }
@@ -132,7 +127,7 @@ namespace AdventOfCode2018
 
             foreach (var v in vertices.Except(graph[pivot]))
             {
-                var currentClique1 = currentClique.Union(new[] {v}).ToList();
+                var currentClique1 = currentClique.Union(new[] { v }).ToList();
                 var vertices1 = verticesCopy.Intersect(graph[v]).ToList();
                 var exclude1 = exclude.Intersect(graph[v]).ToList();
                 BronKerbosch2(graph, cliques, currentClique1, vertices1, exclude1);
@@ -140,16 +135,6 @@ namespace AdventOfCode2018
                 verticesCopy.Remove(v);
                 exclude.Add(v);
             }
-        }
-
-        private static List<List<Bot>> FindCliques(IReadOnlyDictionary<Bot, List<Bot>> neighbours)
-        {
-            var bots = neighbours.Keys.ToList();
-            var cliques = new List<List<Bot>>();
-
-            BronKerbosch2(neighbours, cliques, new List<Bot>(), bots, new List<Bot>());
-
-            return cliques;
         }
 
         private class Bot

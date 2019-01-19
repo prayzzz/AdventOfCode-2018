@@ -27,21 +27,25 @@ namespace AdventOfCode2018
             }
 
             var clusters = new List<List<GridPoint>>();
-            var q = points.ToList();
-            while (q.Count > 0)
+            var queue = points.ToList();
+            while (queue.Count > 0)
             {
                 var toRemove = new List<GridPoint>();
 
-                foreach (var p1 in q)
+                foreach (var point in queue)
                 {
                     foreach (var cluster in clusters)
-                    foreach (var clusterP in cluster)
+                    foreach (var clusteredPoint in cluster)
                     {
-                        var d = Math.Abs(p1.X - clusterP.X) + Math.Abs(p1.Y - clusterP.Y) + Math.Abs(p1.Z - clusterP.Z) + Math.Abs(p1.T - clusterP.T);
-                        if (d < 4)
+                        var dist = Math.Abs(point.X - clusteredPoint.X)
+                                   + Math.Abs(point.Y - clusteredPoint.Y)
+                                   + Math.Abs(point.Z - clusteredPoint.Z)
+                                   + Math.Abs(point.T - clusteredPoint.T);
+
+                        if (dist < 4)
                         {
-                            cluster.Add(p1);
-                            toRemove.Add(p1);
+                            cluster.Add(point);
+                            toRemove.Add(point);
                             goto nextPoint;
                         }
                     }
@@ -52,11 +56,11 @@ namespace AdventOfCode2018
                 // if nothing was added to a cluster, create a new cluster with the first remaining element
                 if (toRemove.Count == 0)
                 {
-                    clusters.Add(new List<GridPoint> { q.First() });
-                    toRemove.Add(q.First());
+                    clusters.Add(new List<GridPoint> { queue.First() });
+                    toRemove.Add(queue.First());
                 }
 
-                toRemove.ForEach(p => q.Remove(p));
+                toRemove.ForEach(p => queue.Remove(p));
             }
 
             return clusters.Count;
